@@ -418,7 +418,7 @@ minetest.register_node("barriers:tl_cr_yr_redyellow", {
 })
 
 minetest.register_node("barriers:barrier_closed_right", {
-	description = "Closed barrier (right)",
+	description = "Barrier motor (right)",
 	groups = {cracky = 1, level = 2},
 	tiles = {"barrier_motor.png"},
 	sounds = default_steel_sounds,
@@ -440,12 +440,12 @@ minetest.register_node("barriers:barrier_closed_right", {
 		effector = {
 			action = function(pos, node, channel, msg)
 				if channel == minetest.get_meta(pos):get_string("channel") then
-					minetest.sound_play("barrier", {
-						pos = pos,
-						max_hear_distance = 10,
-						gain = 10.0,
-					})
 					if msg:upper() == "UP" then
+						minetest.sound_play("barrier", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 10.0,
+						})
 						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
 						if node.param2 == 0 then
 							for i = pos.x + 1, pos.x + 3
@@ -487,6 +487,11 @@ minetest.register_node("barriers:barrier_closed_right", {
 					--[[elseif msg:upper() == "HALF" then
 						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})]]--
 					elseif msg:upper() == "DOWN" then
+						minetest.sound_play("barrier", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 10.0,
+						})
 						minetest.swap_node(pos, {name = "barriers:barrier_closed_right", param2 = node.param2})
 						if node.param2 == 0 then
 							for i = pos.x + 1, pos.x + 3
@@ -600,7 +605,7 @@ minetest.register_node("barriers:barrier_halfway_right", {
 ]]--
 
 minetest.register_node("barriers:barrier_opened_right", {
-	description = "Opened barrier (right)",
+	description = "Barrier motor (right)",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
 	tiles = {"barrier_motor.png"},
 	sounds = default_steel_sounds,
@@ -622,12 +627,12 @@ minetest.register_node("barriers:barrier_opened_right", {
 		effector = {
 			action = function(pos, node, channel, msg)
 				if channel == minetest.get_meta(pos):get_string("channel") then
-					minetest.sound_play("barrier", {
-						pos = pos,
-						max_hear_distance = 10,
-						gain = 10.0,
-					})
 					if msg:upper() == "UP" then
+						minetest.sound_play("barrier", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 10.0,
+						})
 						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
 						if node.param2 == 0 then
 							for i = pos.x + 1, pos.x + 3
@@ -669,6 +674,11 @@ minetest.register_node("barriers:barrier_opened_right", {
 					--[[elseif msg:upper() == "HALF" then
 						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})]]--
 					elseif msg:upper() == "DOWN" then
+						minetest.sound_play("barrier", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 10.0,
+						})
 						minetest.swap_node(pos, {name = "barriers:barrier_closed_right", param2 = node.param2})
 						if node.param2 == 0 then
 							for i = pos.x + 1, pos.x + 3
@@ -713,6 +723,276 @@ minetest.register_node("barriers:barrier_opened_right", {
 		},
 	},
 	drop = "barriers:barrier_closed_right",
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "field[channel;Channel;${channel}]")
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local name = sender:get_player_name()
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
+			minetest.record_protection_violation(pos, name)
+			return
+		end
+		if fields.channel then
+			minetest.get_meta(pos):set_string("channel", fields.channel)
+			minetest.get_meta(pos):set_string("state", "Off")
+		end
+	end,
+})
+
+minetest.register_node("barriers:barrier_closed_left", {
+	description = "Barrier motor (left)",
+	groups = {cracky = 1, level = 2},
+	tiles = {"barrier_motor.png"},
+	sounds = default_steel_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.3, -0.5, -0.3, 0.3, 0.9, 0.3},
+			{-0.2, 0.4, -0.5, 0.2, 0.8, -0.3},
+			{-0.5, 0.5, -0.5, -0.2, 0.7, -0.3},
+		},
+	},
+	digiline = {
+		receptor = {},
+		wire = {rules = tlRules},
+		effector = {
+			action = function(pos, node, channel, msg)
+				if channel == minetest.get_meta(pos):get_string("channel") then
+					if msg:upper() == "UP" then
+						minetest.sound_play("barrier", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 10.0,
+						})
+						minetest.swap_node(pos, {name = "barriers:barrier_opened_left", param2 = node.param2})
+						if node.param2 == 2 then
+							for i = pos.x + 1, pos.x + 3
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 3 then
+							for i = pos.z - 3, pos.z - 1
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 0 then
+							for i = pos.x - 3, pos.x - 1
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 1 then
+							for i = pos.z + 1, pos.z + 3
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						end
+					--[[elseif msg:upper() == "HALF" then
+						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})]]--
+					elseif msg:upper() == "DOWN" then
+						minetest.sound_play("barrier", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 10.0,
+						})
+						minetest.swap_node(pos, {name = "barriers:barrier_closed_left", param2 = node.param2})
+						if node.param2 == 2 then
+							for i = pos.x + 1, pos.x + 3
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 3 then
+							for i = pos.z - 3, pos.z - 1
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 0 then
+							for i = pos.x - 3, pos.x - 1
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 1 then
+							for i = pos.z + 1, pos.z + 3
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						end
+					end
+				end
+			end,
+		},
+	},
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "field[channel;Channel;${channel}]")
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local name = sender:get_player_name()
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
+			minetest.record_protection_violation(pos, name)
+			return
+		end
+		if fields.channel then
+			minetest.get_meta(pos):set_string("channel", fields.channel)
+			minetest.get_meta(pos):set_string("state", "Off")
+		end
+	end,
+})
+
+minetest.register_node("barriers:barrier_opened_left", {
+	description = "Barrier motor (left)",
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
+	tiles = {"barrier_motor.png"},
+	sounds = default_steel_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.3, -0.5, -0.3, 0.3, 0.9, 0.3},
+			{-0.2, 0.4, -0.5, 0.2, 0.8, -0.3},
+			{-0.1, 0.8, -0.5, 0.1, 1, -0.3},
+		},
+	},
+	digiline = {
+		receptor = {},
+		wire = {rules = tlRules},
+		effector = {
+			action = function(pos, node, channel, msg)
+				if channel == minetest.get_meta(pos):get_string("channel") then
+					if msg:upper() == "UP" then
+						minetest.sound_play("barrier", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 10.0,
+						})
+						minetest.swap_node(pos, {name = "barriers:barrier_opened_left", param2 = node.param2})
+						if node.param2 == 2 then
+							for i = pos.x + 1, pos.x + 3
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 3 then
+							for i = pos.z - 3, pos.z - 1
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 0 then
+							for i = pos.x - 3, pos.x - 1
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 1 then
+							for i = pos.z + 1, pos.z + 3
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						end
+					--[[elseif msg:upper() == "HALF" then
+						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})]]--
+					elseif msg:upper() == "DOWN" then
+						minetest.sound_play("barrier", {
+							pos = pos,
+							max_hear_distance = 10,
+							gain = 10.0,
+						})
+						minetest.swap_node(pos, {name = "barriers:barrier_closed_left", param2 = node.param2})
+						if node.param2 == 2 then
+							for i = pos.x + 1, pos.x + 3
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 3 then
+							for i = pos.z - 3, pos.z - 1
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 0 then
+							for i = pos.x - 3, pos.x - 1
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 1 then
+							for i = pos.z + 1, pos.z + 3
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						end
+					end
+				end
+			end,
+		},
+	},
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		meta:set_string("formspec", "field[channel;Channel;${channel}]")
