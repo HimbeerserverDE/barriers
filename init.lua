@@ -442,10 +442,84 @@ minetest.register_node("barriers:barrier_closed_right", {
 				if channel == minetest.get_meta(pos):get_string("channel") then
 					if msg:upper() == "UP" then
 						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
+						if node.param2 == 0 then
+							for i = pos.x + 1, pos.x + 3
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 1 then
+							for i = pos.z - 3, pos.z - 1
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 2 then
+							for i = pos.x - 3, pos.x - 1
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 3 then
+							for i = pos.z + 1, pos.z + 3
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						end
 					--[[elseif msg:upper() == "HALF" then
 						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})]]--
 					elseif msg:upper() == "DOWN" then
 						minetest.swap_node(pos, {name = "barriers:barrier_closed_right", param2 = node.param2})
+						if node.param2 == 0 then
+							for i = pos.x + 1, pos.x + 3
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 1 then
+							for i = pos.z - 3, pos.z - 1
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 2 then
+							for i = pos.x - 3, pos.x - 1
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 3 then
+							for i = pos.z + 1, pos.z + 3
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						end
 					end
 				end
 			end,
@@ -545,11 +619,84 @@ minetest.register_node("barriers:barrier_opened_right", {
 				if channel == minetest.get_meta(pos):get_string("channel") then
 					if msg:upper() == "UP" then
 						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
-						minetest.chat_send_all(pos:tostring())
+						if node.param2 == 0 then
+							for i = pos.x + 1, pos.x + 3
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 1 then
+							for i = pos.z - 3, pos.z - 1
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 2 then
+							for i = pos.x - 3, pos.x - 1
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						elseif node.param2 == 3 then
+							for i = pos.z + 1, pos.z + 3
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "air"})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "barriers:barrier_part_vertical", param2 = node.param2})
+							end
+						end
 					--[[elseif msg:upper() == "HALF" then
 						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})]]--
 					elseif msg:upper() == "DOWN" then
 						minetest.swap_node(pos, {name = "barriers:barrier_closed_right", param2 = node.param2})
+						if node.param2 == 0 then
+							for i = pos.x + 1, pos.x + 3
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 1 then
+							for i = pos.z - 3, pos.z - 1
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 2 then
+							for i = pos.x - 3, pos.x - 1
+							do
+								minetest.swap_node({x = i, y = pos.y, z = pos.z}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						elseif node.param2 == 3 then
+							for i = pos.z + 1, pos.z + 3
+							do
+								minetest.swap_node({x = pos.x, y = pos.y, z = i}, {name = "barriers:barrier_part", param2 = node.param2})
+							end
+							for i = pos.y + 2, pos.y + 4
+							do
+								minetest.swap_node({x = pos.x, y = i, z = pos.z}, {name = "air"})
+							end
+						end
 					end
 				end
 			end,
