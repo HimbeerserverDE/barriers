@@ -162,11 +162,11 @@ minetest.register_node("barriers:tl_cr_yr_off", {
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local name = sender:get_player_name()
-		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, { protection_bypass = true }) then
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
 			minetest.record_protection_violation(pos, name)
 			return
 		end
-		if (fields.channel) then
+		if fields.channel then
 			minetest.get_meta(pos):set_string("channel", fields.channel)
 			minetest.get_meta(pos):set_string("state", "Off")
 		end
@@ -223,11 +223,11 @@ minetest.register_node("barriers:tl_cr_yr_green", {
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local name = sender:get_player_name()
-		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, { protection_bypass = true }) then
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
 			minetest.record_protection_violation(pos, name)
 			return
 		end
-		if (fields.channel) then
+		if fields.channel then
 			minetest.get_meta(pos):set_string("channel", fields.channel)
 			minetest.get_meta(pos):set_string("state", "Off")
 		end
@@ -284,11 +284,11 @@ minetest.register_node("barriers:tl_cr_yr_yellow", {
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local name = sender:get_player_name()
-		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, { protection_bypass = true }) then
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
 			minetest.record_protection_violation(pos, name)
 			return
 		end
-		if (fields.channel) then
+		if fields.channel then
 			minetest.get_meta(pos):set_string("channel", fields.channel)
 			minetest.get_meta(pos):set_string("state", "Off")
 		end
@@ -345,11 +345,11 @@ minetest.register_node("barriers:tl_cr_yr_red", {
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local name = sender:get_player_name()
-		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, { protection_bypass = true }) then
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
 			minetest.record_protection_violation(pos, name)
 			return
 		end
-		if (fields.channel) then
+		if fields.channel then
 			minetest.get_meta(pos):set_string("channel", fields.channel)
 			minetest.get_meta(pos):set_string("state", "Off")
 		end
@@ -406,13 +406,225 @@ minetest.register_node("barriers:tl_cr_yr_redyellow", {
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local name = sender:get_player_name()
-		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, { protection_bypass = true }) then
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
 			minetest.record_protection_violation(pos, name)
 			return
 		end
-		if (fields.channel) then
+		if fields.channel then
 			minetest.get_meta(pos):set_string("channel", fields.channel)
 			minetest.get_meta(pos):set_string("state", "Off")
 		end
 	end,
+})
+
+minetest.register_node("barriers:barrier_closed_right", {
+	description = "Closed barrier (right)",
+	groups = {cracky = 1, level = 2},
+	tiles = {"barrier_motor.png"},
+	sounds = default_steel_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.3, -0.5, -0.3, 0.3, 0.9, 0.3},
+			{-0.2, 0.4, -0.5, 0.2, 0.8, -0.3},
+			{0.2, 0.5, -0.5, 0.5, 0.7, -0.3},
+		},
+	},
+	digiline = {
+		receptor = {},
+		wire = {rules = tlRules},
+		effector = {
+			action = function(pos, node, channel, msg)
+				if channel == minetest.get_meta(pos):get_string("channel") then
+					if msg:upper() == "UP" then
+						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
+					--[[elseif msg:upper() == "HALF" then
+						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})]]--
+					elseif msg:upper() == "DOWN" then
+						minetest.swap_node(pos, {name = "barriers:barrier_closed_right", param2 = node.param2})
+					end
+				end
+			end,
+		},
+	},
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "field[channel;Channel;${channel}]")
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local name = sender:get_player_name()
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
+			minetest.record_protection_violation(pos, name)
+			return
+		end
+		if fields.channel then
+			minetest.get_meta(pos):set_string("channel", fields.channel)
+			minetest.get_meta(pos):set_string("state", "Off")
+		end
+	end,
+})
+
+--[[
+minetest.register_node("barriers:barrier_halfway_right", {
+	description = "Halfway opened barrier (right)",
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
+	tiles = {"barrier_closed_top.png", "barrier_closed_top.png", "barrier_closed_right.png", "barrier_closed_left.png", "barrier_closed_back.png", "barrier_closed_front.png"},
+	sounds = default_steel_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			
+		},
+	},
+	digiline = {
+		receptor = {},
+		wire = {rules = tlRules},
+		effector = {
+			action = function(pos, node, channel, msg)
+				if channel == minetest.get_meta(pos):get_string("channel") then
+					if msg:upper() == "UP" then
+						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
+					elseif msg:upper() == "HALF" then
+						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})
+					elseif msg:upper() == "DOWN" then
+						minetest.swap_node(pos, {name = "barriers:barrier_closed_right", param2 = node.param2})
+					end
+				end
+			end,
+		},
+	},
+	drop = "barriers:barrier_closed_right",
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "field[channel;Channel;${channel}]")
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local name = sender:get_player_name()
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
+			minetest.record_protection_violation(pos, name)
+			return
+		end
+		if fields.channel then
+			minetest.get_meta(pos):set_string("channel", fields.channel)
+			minetest.get_meta(pos):set_string("state", "Off")
+		end
+	end,
+})
+]]--
+
+minetest.register_node("barriers:barrier_opened_right", {
+	description = "Opened barrier (right)",
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
+	tiles = {"barrier_motor.png"},
+	sounds = default_steel_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.3, -0.5, -0.3, 0.3, 0.9, 0.3},
+			{-0.2, 0.4, -0.5, 0.2, 0.8, -0.3},
+			{-0.1, 0.8, -0.5, 0.1, 1, -0.3},
+		},
+	},
+	digiline = {
+		receptor = {},
+		wire = {rules = tlRules},
+		effector = {
+			action = function(pos, node, channel, msg)
+				if channel == minetest.get_meta(pos):get_string("channel") then
+					if msg:upper() == "UP" then
+						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
+						minetest.chat_send_all(pos:tostring())
+					--[[elseif msg:upper() == "HALF" then
+						minetest.swap_node(pos, {name = "barriers:barrier_halfway_right", param2 = node.param2})]]--
+					elseif msg:upper() == "DOWN" then
+						minetest.swap_node(pos, {name = "barriers:barrier_closed_right", param2 = node.param2})
+					end
+				end
+			end,
+		},
+	},
+	drop = "barriers:barrier_closed_right",
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "field[channel;Channel;${channel}]")
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local name = sender:get_player_name()
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
+			minetest.record_protection_violation(pos, name)
+			return
+		end
+		if fields.channel then
+			minetest.get_meta(pos):set_string("channel", fields.channel)
+			minetest.get_meta(pos):set_string("state", "Off")
+		end
+	end,
+})
+
+minetest.register_node("barriers:barrier_part", {
+	description = "Barrier part",
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
+	tiles = {"barrier_part.png", "barrier_part.png", "barrier_part_2.png", "barrier_part_2.png", "barrier_part_2.png", "barrier_part.png"},
+	sounds = default_steel_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, 0.5, -0.5, 0.5, 0.7, -0.3},
+		},
+	},
+	drop = "",
+})
+
+--[[
+minetest.register_node("barriers:barrier_part_diagonal", {
+	description = "Diagonal barrier part",
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
+	tiles = {"barrier_part_diagonal.png"},
+	sounds = default_steel_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			
+		},
+	},
+	drop = "",
+})
+]]--
+
+minetest.register_node("barriers:barrier_part_vertical", {
+	description = "Vertical barrier part",
+	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
+	tiles = {"barrier_part_vertical.png"},
+	sounds = default_steel_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.1, -1, -0.5, 0.1, 0, -0.3},
+		},
+	},
+	drop = "",
 })
