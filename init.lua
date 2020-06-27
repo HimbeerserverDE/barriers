@@ -440,6 +440,11 @@ minetest.register_node("barriers:barrier_closed_right", {
 		effector = {
 			action = function(pos, node, channel, msg)
 				if channel == minetest.get_meta(pos):get_string("channel") then
+					minetest.sound_play("barrier", {
+						pos = pos,
+						max_hear_distance = 10,
+						gain = 10.0,
+					})
 					if msg:upper() == "UP" then
 						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
 						if node.param2 == 0 then
@@ -617,6 +622,11 @@ minetest.register_node("barriers:barrier_opened_right", {
 		effector = {
 			action = function(pos, node, channel, msg)
 				if channel == minetest.get_meta(pos):get_string("channel") then
+					minetest.sound_play("barrier", {
+						pos = pos,
+						max_hear_distance = 10,
+						gain = 10.0,
+					})
 					if msg:upper() == "UP" then
 						minetest.swap_node(pos, {name = "barriers:barrier_opened_right", param2 = node.param2})
 						if node.param2 == 0 then
