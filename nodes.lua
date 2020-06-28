@@ -1137,7 +1137,7 @@ minetest.register_node("barriers:tl_p_gr_red", {
 					elseif msg:upper() == "FLASHRED" then
 						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
 					elseif msg:upper() == "GREEN" then
-						minetest.swap_node(pos, {name = "barriers:tl_cr_p_green", param2 = node.param2})
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_green", param2 = node.param2})
 					end
 				end
 			end,
