@@ -1043,3 +1043,179 @@ minetest.register_node("barriers:barrier_part_vertical", {
 	},
 	drop = "",
 })
+
+minetest.register_node("barriers:tl_p_gr_off", {
+	description = "Pedestrian light (green + red)",
+	groups = {cracky = 1, level = 0},
+	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_face_off.png"},
+	sounds = default_stone_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.2, -0.3, 0.7, 0.2, 0.3, 0.5},
+			{-0.1, -0.1, 0.9, 0.1, 0.1, 0.7},
+			{-0.125, 0.25, 0.5, -0.063, 0.188, 0.35},
+			{-0.063, 0.312, 0.5, 0.061, 0.25, 0.35},
+			{0.061, 0.25, 0.5, 0.123, 0.188, 0.35},
+			{-0.125, -0.0445, 0.5, -0.063, -0.1065, 0.35},
+			{-0.063, 0.0175, 0.5, 0.061, -0.0445, 0.35},
+			{0.061, -0.0445, 0.5, 0.123, -0.1065, 0.35},
+		},
+	},
+	digiline = {
+		receptor = {},
+		wire = {rules = tlRules},
+		effector = {
+			action = function(pos, node, channel, msg)
+				if channel == minetest.get_meta(pos):get_string("channel") then
+					if msg:upper() == "OFF" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_off", param2 = node.param2})
+					elseif msg:upper() == "RED" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
+					elseif msg:upper() == "FLASHRED" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
+					elseif msg:upper() == "GREEN" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_green", param2 = node.param2})
+					end
+				end
+			end,
+		},
+	},
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "field[channel;Channel;${channel}]")
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local name = sender:get_player_name()
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
+			minetest.record_protection_violation(pos, name)
+			return
+		end
+		if fields.channel then
+			minetest.get_meta(pos):set_string("channel", fields.channel)
+			minetest.get_meta(pos):set_string("state", "Off")
+		end
+	end,
+})
+
+minetest.register_node("barriers:tl_p_gr_red", {
+	description = "Pedestrian light (green + red) (red)",
+	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
+	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_p_gr_face_red.png"},
+	sounds = default_stone_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.2, -0.3, 0.7, 0.2, 0.3, 0.5},
+			{-0.1, -0.1, 0.9, 0.1, 0.1, 0.7},
+			{-0.125, 0.25, 0.5, -0.063, 0.188, 0.35},
+			{-0.063, 0.312, 0.5, 0.061, 0.25, 0.35},
+			{0.061, 0.25, 0.5, 0.123, 0.188, 0.35},
+			{-0.125, -0.0445, 0.5, -0.063, -0.1065, 0.35},
+			{-0.063, 0.0175, 0.5, 0.061, -0.0445, 0.35},
+			{0.061, -0.0445, 0.5, 0.123, -0.1065, 0.35},
+		},
+	},
+	digiline = {
+		receptor = {},
+		wire = {rules = tlRules},
+		effector = {
+			action = function(pos, node, channel, msg)
+				if channel == minetest.get_meta(pos):get_string("channel") then
+					if msg:upper() == "OFF" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_off", param2 = node.param2})
+					elseif msg:upper() == "RED" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
+					elseif msg:upper() == "FLASHRED" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
+					elseif msg:upper() == "GREEN" then
+						minetest.swap_node(pos, {name = "barriers:tl_cr_p_green", param2 = node.param2})
+					end
+				end
+			end,
+		},
+	},
+	drop = "barriers:tl_p_gr_off",
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "field[channel;Channel;${channel}]")
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local name = sender:get_player_name()
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
+			minetest.record_protection_violation(pos, name)
+			return
+		end
+		if fields.channel then
+			minetest.get_meta(pos):set_string("channel", fields.channel)
+			minetest.get_meta(pos):set_string("state", "Off")
+		end
+	end,
+})
+
+minetest.register_node("barriers:tl_p_gr_green", {
+	description = "Pedestrian light (green + red) (green)",
+	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
+	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_p_gr_face_green.png"},
+	sounds = default_stone_sounds,
+	paramtype = "light",
+	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	drawtype = "nodebox",
+	node_box = {
+		type = "fixed",
+		fixed = {
+			{-0.2, -0.3, 0.7, 0.2, 0.3, 0.5},
+			{-0.1, -0.1, 0.9, 0.1, 0.1, 0.7},
+			{-0.125, 0.25, 0.5, -0.063, 0.188, 0.35},
+			{-0.063, 0.312, 0.5, 0.061, 0.25, 0.35},
+			{0.061, 0.25, 0.5, 0.123, 0.188, 0.35},
+			{-0.125, -0.0445, 0.5, -0.063, -0.1065, 0.35},
+			{-0.063, 0.0175, 0.5, 0.061, -0.0445, 0.35},
+			{0.061, -0.0445, 0.5, 0.123, -0.1065, 0.35},
+		},
+	},
+	digiline = {
+		receptor = {},
+		wire = {rules = tlRules},
+		effector = {
+			action = function(pos, node, channel, msg)
+				if channel == minetest.get_meta(pos):get_string("channel") then
+					if msg:upper() == "OFF" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_off", param2 = node.param2})
+					elseif msg:upper() == "RED" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
+					elseif msg:upper() == "FLASHRED" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
+					elseif msg:upper() == "GREEN" then
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_green", param2 = node.param2})
+					end
+				end
+			end,
+		},
+	},
+	drop = "barriers:tl_p_gr_off",
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		meta:set_string("formspec", "field[channel;Channel;${channel}]")
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		local name = sender:get_player_name()
+		if minetest.is_protected(pos, name) and not minetest.check_player_privs(name, {protection_bypass = true}) then
+			minetest.record_protection_violation(pos, name)
+			return
+		end
+		if fields.channel then
+			minetest.get_meta(pos):set_string("channel", fields.channel)
+			minetest.get_meta(pos):set_string("state", "Off")
+		end
+	end,
+})
