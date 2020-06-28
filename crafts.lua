@@ -32,3 +32,12 @@ minetest.register_craft({
 		{"dye:red", "dye:dark_green", "default:steel_ingot"},
 	},
 })
+
+minetest.register_craft({
+	output = "barriers:tl_p_gr_off",
+	recipe = {
+		{"wool:black", "dye:red", "wool:black"},
+		{"wool:black", "wool:black", "wool:black"},
+		{"wool:black", "dye:green", "wool:black"},
+	},
+})
