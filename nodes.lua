@@ -41,7 +41,7 @@ minetest.register_node("barriers:warning_light_off", {
 	description = "Warning light",
 	groups = {cracky = 1, level = 0},
 	tiles = {"warning_light_top_off.png", "warning_light_bottom.png", "warning_light_off.png", "warning_light_off.png", "warning_light_off.png", "warning_light_off.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -67,7 +67,7 @@ minetest.register_node("barriers:warning_light_on", {
 	description = "Warning light (on)",
 	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
 	tiles = {{name = "warning_light_top_on.png", animation = {type = "vertical_frames", aspect_w = 64, aspect_h = 64, length = 0.8}}, "warning_light_bottom.png", {name = "warning_light_on.png", animation = {type = "vertical_frames", aspect_w = 64, aspect_h = 64, length = 0.8}}, {name = "warning_light_on.png", animation = {type = "vertical_frames", aspect_w = 64, aspect_h = 64, length = 0.8}}, {name = "warning_light_on.png", animation = {type = "vertical_frames", aspect_w = 64, aspect_h = 64, length = 0.8}}, {name = "warning_light_on.png", animation = {type = "vertical_frames", aspect_w = 64, aspect_h = 64, length = 0.8}}},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -95,7 +95,7 @@ minetest.register_node("barriers:tl_cr_yr_off", {
 	description = "Railroad crossing light (yellow + red)",
 	groups = {cracky = 1, level = 0},
 	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_face_off.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -129,6 +129,8 @@ minetest.register_node("barriers:tl_cr_yr_off", {
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_green", param2 = node.param2})
 					elseif msg:upper() == "REDYELLOW" then
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_redyellow", param2 = node.param2})
+					elseif msg:upper() == "GET" then
+						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
 					end
 				end
 			end,
@@ -155,7 +157,7 @@ minetest.register_node("barriers:tl_cr_yr_green", {
 	description = "Railroad crossing light (yellow + red) (green)",
 	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
 	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_face_green.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -189,6 +191,8 @@ minetest.register_node("barriers:tl_cr_yr_green", {
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_green", param2 = node.param2})
 					elseif msg:upper() == "REDYELLOW" then
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_redyellow", param2 = node.param2})
+					elseif msg:upper() == "GET" then
+						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
 					end
 				end
 			end,
@@ -216,7 +220,7 @@ minetest.register_node("barriers:tl_cr_yr_yellow", {
 	description = "Railroad crossing light (yellow + red) (yellow)",
 	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
 	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_face_yellow.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -250,6 +254,8 @@ minetest.register_node("barriers:tl_cr_yr_yellow", {
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_green", param2 = node.param2})
 					elseif msg:upper() == "REDYELLOW" then
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_redyellow", param2 = node.param2})
+					elseif msg:upper() == "GET" then
+						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
 					end
 				end
 			end,
@@ -277,7 +283,7 @@ minetest.register_node("barriers:tl_cr_yr_red", {
 	description = "Railroad crossing light (yellow + red) (red)",
 	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
 	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_face_red.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -311,6 +317,8 @@ minetest.register_node("barriers:tl_cr_yr_red", {
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_green", param2 = node.param2})
 					elseif msg:upper() == "REDYELLOW" then
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_redyellow", param2 = node.param2})
+					elseif msg:upper() == "GET" then
+						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
 					end
 				end
 			end,
@@ -338,7 +346,7 @@ minetest.register_node("barriers:tl_cr_yr_redyellow", {
 	description = "Railroad crossing light (yellow + red) (redyellow)",
 	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
 	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_face_redyellow.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -372,6 +380,8 @@ minetest.register_node("barriers:tl_cr_yr_redyellow", {
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_green", param2 = node.param2})
 					elseif msg:upper() == "REDYELLOW" then
 						minetest.swap_node(pos, {name = "barriers:tl_cr_yr_redyellow", param2 = node.param2})
+					elseif msg:upper() == "GET" then
+						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
 					end
 				end
 			end,
@@ -399,7 +409,7 @@ minetest.register_node("barriers:barrier_closed_right", {
 	description = "Barrier motor (right)",
 	groups = {cracky = 1, level = 2},
 	tiles = {"barrier_motor.png"},
-	sounds = default_steel_sounds,
+	sounds = default.node_sound_metal_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -586,7 +596,7 @@ minetest.register_node("barriers:barrier_opened_right", {
 	description = "Barrier motor (right)",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
 	tiles = {"barrier_motor.png"},
-	sounds = default_steel_sounds,
+	sounds = default.node_sound_metal_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -722,7 +732,7 @@ minetest.register_node("barriers:barrier_closed_left", {
 	description = "Barrier motor (left)",
 	groups = {cracky = 1, level = 2},
 	tiles = {"barrier_motor.png"},
-	sounds = default_steel_sounds,
+	sounds = default.node_sound_metal_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -857,7 +867,7 @@ minetest.register_node("barriers:barrier_opened_left", {
 	description = "Barrier motor (left)",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
 	tiles = {"barrier_motor.png"},
-	sounds = default_steel_sounds,
+	sounds = default.node_sound_metal_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -992,7 +1002,7 @@ minetest.register_node("barriers:barrier_part", {
 	description = "Barrier part",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
 	tiles = {"barrier_part.png", "barrier_part.png", "barrier_part_2.png", "barrier_part_2.png", "barrier_part_2.png", "barrier_part.png"},
-	sounds = default_steel_sounds,
+	sounds = default.node_sound_metal_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -1030,7 +1040,7 @@ minetest.register_node("barriers:barrier_part_vertical", {
 	description = "Vertical barrier part",
 	groups = {cracky = 1, level = 2, not_in_creative_inventory = 1},
 	tiles = {"barrier_part_vertical.png"},
-	sounds = default_steel_sounds,
+	sounds = default.node_sound_metal_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -1048,7 +1058,7 @@ minetest.register_node("barriers:tl_p_gr_off", {
 	description = "Pedestrian light (green + red)",
 	groups = {cracky = 1, level = 0},
 	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_face_off.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -1080,6 +1090,8 @@ minetest.register_node("barriers:tl_p_gr_off", {
 						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
 					elseif msg:upper() == "GREEN" then
 						minetest.swap_node(pos, {name = "barriers:tl_p_gr_green", param2 = node.param2})
+					elseif msg:upper() == "GET" then
+						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
 					end
 				end
 			end,
@@ -1106,7 +1118,7 @@ minetest.register_node("barriers:tl_p_gr_red", {
 	description = "Pedestrian light (green + red) (red)",
 	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
 	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_p_gr_face_red.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -1138,6 +1150,8 @@ minetest.register_node("barriers:tl_p_gr_red", {
 						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
 					elseif msg:upper() == "GREEN" then
 						minetest.swap_node(pos, {name = "barriers:tl_cr_p_green", param2 = node.param2})
+					elseif msg:upper() == "GET" then
+						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
 					end
 				end
 			end,
@@ -1165,7 +1179,7 @@ minetest.register_node("barriers:tl_p_gr_green", {
 	description = "Pedestrian light (green + red) (green)",
 	groups = {cracky = 1, level = 0, not_in_creative_inventory = 1},
 	tiles = {"tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_cr_yr_off.png", "tl_p_gr_face_green.png"},
-	sounds = default_stone_sounds,
+	sounds = default.node_sound_stone_defaults(),
 	paramtype = "light",
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
@@ -1197,6 +1211,8 @@ minetest.register_node("barriers:tl_p_gr_green", {
 						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
 					elseif msg:upper() == "GREEN" then
 						minetest.swap_node(pos, {name = "barriers:tl_p_gr_green", param2 = node.param2})
+					elseif msg:upper() == "GET" then
+						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
 					end
 				end
 			end,
