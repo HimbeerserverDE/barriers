@@ -1149,9 +1149,13 @@ minetest.register_node("barriers:tl_p_gr_red", {
 					elseif msg:upper() == "FLASHRED" then
 						minetest.swap_node(pos, {name = "barriers:tl_p_gr_red", param2 = node.param2})
 					elseif msg:upper() == "GREEN" then
+<<<<<<< HEAD
 						minetest.swap_node(pos, {name = "barriers:tl_cr_p_green", param2 = node.param2})
 					elseif msg:upper() == "GET" then
 						digiline:receptor_send(pos, tlRules, channel, minetest.get_node(pos).name:split("_")[4])
+=======
+						minetest.swap_node(pos, {name = "barriers:tl_p_gr_green", param2 = node.param2})
+>>>>>>> 974ff2986b582254c8347af78a894f7d6ecb317f
 					end
 				end
 			end,
